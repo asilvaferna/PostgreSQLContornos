@@ -1,19 +1,15 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package postgresqlcontornos;
 
 import javax.swing.JOptionPane;
 
 /**
- *
+ * Menu class that uses the ClaseConexion methods.
  * @author adri
  */
 public class Menu {
 
     /**
+     * Main method, we call all the ClaseConexion methods.
      * @param args the command line arguments
      */
     public static void main(String[] args) {
@@ -31,10 +27,7 @@ public class Menu {
         cC.modificarDatosNumericos("salary", 3000f, 1);
         cC.modificarDatosString("name", "Arturo", 1);
         cC.cerrarConexion();
-        
-            
-        
-        
+  
     }
 
 }

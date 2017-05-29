@@ -12,8 +12,9 @@ import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 
 /**
- * ClaseConexion is the class that is used to manage all the operations 
- * related to the database.
+ * ClaseConexion is the class that is used to manage all the operations related
+ * to the database.
+ *
  * @author adri
  */
 public class ClaseConexion {
@@ -24,16 +25,24 @@ public class ClaseConexion {
     private Connection c;
     private Statement stmt;
 
+    /**
+     * Constructor of the class, it connects itself to the DB.
+     */
     public ClaseConexion() {
         url = "jdbc:postgresql://localhost:5432/dbcd";
         conectar();
-        //leerCredenciales();
+
     }
 
+    /**
+     * Constructor of the class, it connects to the DB url.
+     *
+     * @param url
+     */
     public ClaseConexion(String url) {
         this.url = url;
         conectar();
-        //leerCredenciales();
+
     }
 
     /**
@@ -101,7 +110,6 @@ public class ClaseConexion {
     /**
      * Closes the conection to the DB server
      */
-    
     public void cerrarConexion() {
         try {
             c.close();
@@ -109,16 +117,16 @@ public class ClaseConexion {
             System.out.println("Fallo al cerrar la conexion");
         }
     }
-    
+
     /**
      * Modifies the String values of the table, one each time.
+     *
      * @param tableName
      * @param campo
      * @param valor
      * @param identifier
      * @return 0 if exception, 1 otherwise.
      */
-    
     public int modificarDatosString(String campo, String valor, int identifier) {
         try {
             stmt = c.createStatement();
@@ -133,15 +141,15 @@ public class ClaseConexion {
 
     /**
      * Modifies the numeric values of the table, one each time.
+     *
      * @param tableName
      * @param campo
      * @param valor
      * @param identifier
      * @return 0 if exception, 1 otherwise.
      */
-    
     public int modificarDatosNumericos(String campo, Float valor, int identifier) {
-        try { 
+        try {
             stmt = c.createStatement();
             String sql = "UPDATE company set " + campo + "= " + valor + " where ID=" + identifier + ";";
             stmt.executeUpdate(sql);
