@@ -21,7 +21,7 @@ import javax.swing.JOptionPane;
  * @author adri
  */
 public class ClaseConexion {
-    
+
     private String url;
     private String user;
     private String pwd;
@@ -30,26 +30,33 @@ public class ClaseConexion {
 
     public ClaseConexion() {
         url = "jdbc:postgresql://localhost:5432/dbcd";
+        conectar();
         leerCredenciales();
-         
     }
-    
+
+    public ClaseConexion(String url) {
+        this.url = url;
+        conectar();
+        leerCredenciales();
+    }
+
     /**
      * This method reads the credentials for the DB user.
+     *
      * @exception FileNotFoundException
-     * 
+     *
      */
-    public void leerCredenciales(){
+    public void leerCredenciales() {
         Scanner sc = null;
         boolean b = true;
         try {
             sc = new Scanner(new File("/home/adri/NetBeansProjects/PostgreSQLContornos/user.txt"));
             while (sc.hasNext()) {
-                if(b){
-                  user = sc.next();
-                  b = false;
+                if (b) {
+                    user = sc.next();
+                    b = false;
                 } else {
-                  pwd = sc.next();
+                    pwd = sc.next();
                 }
             }
         } catch (FileNotFoundException ex) {
@@ -58,44 +65,79 @@ public class ClaseConexion {
             sc.close();
         }
     }
-    
+
     /**
      * Insert data into a table.
-     * @param tableName 
+     *
+     * @param id
+     * @param name
+     * @param edad
+     * @param address
+     * @param salario
      * @exception SQLException if the statement fails.
+     * @return 0 if exception, 1 otherwise.
      */
-    public void insertarDatos(String tableName){
+    public int insertarDatos(int id, String name, int edad, String address, float salario) {
         String sqlQuery = null;
-        int id = Integer.parseInt(JOptionPane.showInputDialog("ID: "));
-        String name = JOptionPane.showInputDialog("Nombre: ");
-        int edad = Integer.parseInt(JOptionPane.showInputDialog("Edad: "));
-        String address = JOptionPane.showInputDialog("Pais: ");
-        float salario = Float.parseFloat(JOptionPane.showInputDialog("Salario: "));
-        sqlQuery = "insert into " + tableName + " (id, name, age, address, salario)" + " values (" + id + ", " + name + ", " + edad + ", " + address + ", " + salario + ")"; 
+        sqlQuery = "insert into prueba" + " (id, name, age, address, salario)" + " values (" + id + ", '" + name + "', " + edad + ", '" + address + "', " + salario + ")";
         try {
             stmt = c.createStatement();
             stmt.executeUpdate(sqlQuery);
             stmt.close();
         } catch (SQLException ex) {
             System.out.println("Error en el statement");
+            return 0;
         }
+        return 1;
     }
-    
+
     /**
      * Checks if the conexion to the DB is correct
+     *
      * @return true if the conexion is permited
      * @return false if the conexion is not permited.
      */
-    public boolean conectar(){
+    public boolean conectar() {
         try {
+            Class.forName("org.postgresql.Driver");
             c = DriverManager.getConnection(url, user, pwd);
             return true;
         } catch (SQLException ex) {
             System.out.println("Conexion no válida");
             return false;
+        } catch (ClassNotFoundException ex) {
+            return false;
         }
     }
+
+    /**
+     * Deletes a row of the table 'prueba' that is identified by 'id'.
+     *
+     * @param id
+     * @return 0 if exception, 1 otherwise.
+     */
+    public int borrarDatos(int id) {
+        try {
+            stmt = c.createStatement();
+            String sql = "DELETE from PRUEBA where id=" + id;
+            stmt.executeUpdate(sql);
+            stmt.close();
+        } catch (SQLException ex) {
+            return 0;
+        }
+        return 1;
+    }
+
+    /**
+     * Closes the conection to the DB server.
+     */
     
-    
-    
+    public void cerrarConexion() {
+        try {
+            c.close();
+        } catch (SQLException ex) {
+            System.out.println("Fallo al cerrar la conexion");
+        }
+    }
+
 }
