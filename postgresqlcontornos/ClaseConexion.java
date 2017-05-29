@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package postgresqlcontornos;
 
 import java.io.File;
@@ -17,7 +12,8 @@ import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 
 /**
- *
+ * ClaseConexion is the class that is used to manage all the operations 
+ * related to the database.
  * @author adri
  */
 public class ClaseConexion {
@@ -129,7 +125,7 @@ public class ClaseConexion {
     }
 
     /**
-     * Closes the conection to the DB server.
+     * Closes the conection to the DB server
      */
     
     public void cerrarConexion() {
@@ -138,6 +134,48 @@ public class ClaseConexion {
         } catch (SQLException ex) {
             System.out.println("Fallo al cerrar la conexion");
         }
+    }
+    
+    /**
+     * Modifies the String values of the table, one each time.
+     * @param tableName
+     * @param campo
+     * @param valor
+     * @param identifier
+     * @return 0 if exception, 1 otherwise.
+     */
+    
+    public int modificarDatosString(String tableName, String campo, String valor, int identifier) {
+        try {
+            stmt = c.createStatement();
+            String sql = "UPDATE prueba set " + campo + "= '" + valor + "' where ID=" + identifier + ";";
+            stmt.executeUpdate(sql);
+        } catch (SQLException ex) {
+            System.out.println("Campo no valido");
+            return 0;
+        }
+        return 1;
+    }
+
+    /**
+     * Modifies the numeric values of the table, one each time.
+     * @param tableName
+     * @param campo
+     * @param valor
+     * @param identifier
+     * @return 0 if exception, 1 otherwise.
+     */
+    
+    public int modificarDatosNumericos(String tableName, String campo, Float valor, int identifier) {
+        try { 
+            stmt = c.createStatement();
+            String sql = "UPDATE " + tableName + " set " + campo + "= " + valor + " where ID=" + identifier + ";";
+            stmt.executeUpdate(sql);
+        } catch (SQLException ex) {
+            System.out.println("Campo no valido");
+            return 0;
+        }
+        return 1;
     }
 
 }
