@@ -27,39 +27,13 @@ public class ClaseConexion {
     public ClaseConexion() {
         url = "jdbc:postgresql://localhost:5432/dbcd";
         conectar();
-        leerCredenciales();
+        //leerCredenciales();
     }
 
     public ClaseConexion(String url) {
         this.url = url;
         conectar();
-        leerCredenciales();
-    }
-
-    /**
-     * This method reads the credentials for the DB user.
-     *
-     * @exception FileNotFoundException
-     *
-     */
-    public void leerCredenciales() {
-        Scanner sc = null;
-        boolean b = true;
-        try {
-            sc = new Scanner(new File("/home/adri/NetBeansProjects/PostgreSQLContornos/user.txt"));
-            while (sc.hasNext()) {
-                if (b) {
-                    user = sc.next();
-                    b = false;
-                } else {
-                    pwd = sc.next();
-                }
-            }
-        } catch (FileNotFoundException ex) {
-            System.out.println("Error 2 " + ex.getMessage());
-        } finally {
-            sc.close();
-        }
+        //leerCredenciales();
     }
 
     /**
@@ -75,7 +49,7 @@ public class ClaseConexion {
      */
     public int insertarDatos(int id, String name, int edad, String address, float salario) {
         String sqlQuery = null;
-        sqlQuery = "insert into prueba" + " (id, name, age, address, salario)" + " values (" + id + ", '" + name + "', " + edad + ", '" + address + "', " + salario + ")";
+        sqlQuery = "insert into company" + " (id, name, age, address, salary)" + " values (" + id + ", '" + name + "', " + edad + ", '" + address + "', " + salario + ")";
         try {
             stmt = c.createStatement();
             stmt.executeUpdate(sqlQuery);
@@ -96,7 +70,7 @@ public class ClaseConexion {
     public boolean conectar() {
         try {
             Class.forName("org.postgresql.Driver");
-            c = DriverManager.getConnection(url, user, pwd);
+            c = DriverManager.getConnection(url, "adrian", "root");
             return true;
         } catch (SQLException ex) {
             System.out.println("Conexion no válida");
@@ -115,7 +89,7 @@ public class ClaseConexion {
     public int borrarDatos(int id) {
         try {
             stmt = c.createStatement();
-            String sql = "DELETE from PRUEBA where id=" + id;
+            String sql = "DELETE from company where id=" + id;
             stmt.executeUpdate(sql);
             stmt.close();
         } catch (SQLException ex) {
@@ -145,10 +119,10 @@ public class ClaseConexion {
      * @return 0 if exception, 1 otherwise.
      */
     
-    public int modificarDatosString(String tableName, String campo, String valor, int identifier) {
+    public int modificarDatosString(String campo, String valor, int identifier) {
         try {
             stmt = c.createStatement();
-            String sql = "UPDATE prueba set " + campo + "= '" + valor + "' where ID=" + identifier + ";";
+            String sql = "UPDATE company set " + campo + "= '" + valor + "' where ID=" + identifier + ";";
             stmt.executeUpdate(sql);
         } catch (SQLException ex) {
             System.out.println("Campo no valido");
@@ -166,10 +140,10 @@ public class ClaseConexion {
      * @return 0 if exception, 1 otherwise.
      */
     
-    public int modificarDatosNumericos(String tableName, String campo, Float valor, int identifier) {
+    public int modificarDatosNumericos(String campo, Float valor, int identifier) {
         try { 
             stmt = c.createStatement();
-            String sql = "UPDATE " + tableName + " set " + campo + "= " + valor + " where ID=" + identifier + ";";
+            String sql = "UPDATE company set " + campo + "= " + valor + " where ID=" + identifier + ";";
             stmt.executeUpdate(sql);
         } catch (SQLException ex) {
             System.out.println("Campo no valido");
